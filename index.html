@@ -15,6 +15,9 @@
     <!-- 新增日系復古像素字體 -->
     <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
     
+    <!-- 載入 Tone.js 來生成復古 8-bit 音效與音樂 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    
     <!-- 設定 Line/IG 等通訊軟體分享時的預覽圖 -->
     <meta property="og:title" content="★ 秋日大作戰">
     <meta property="og:description" content="2026.11.15 - 11.20">
@@ -47,9 +50,9 @@
         header h1 { margin: 0; font-size: 26px; font-weight: bold; letter-spacing: 2px; text-shadow: 2px 2px 0px #111; }
         header p { margin: 10px 0 0; font-size: 14px; letter-spacing: 1px; font-weight: bold; text-shadow: 1px 1px 0px #111; }
         
-        .top-bar { text-align: right; padding: 10px; background-color: var(--primary-color); }
-        .font-toggle-btn { background: #fff; border: 2px solid #111; box-shadow: 2px 2px 0 #111; padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.1s; color: #111; -webkit-tap-highlight-color: transparent; }
-        .font-toggle-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 #111; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: var(--primary-color); }
+        .font-toggle-btn, .music-toggle-btn { background: #fff; border: 2px solid #111; box-shadow: 2px 2px 0 #111; padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.1s; color: #111; -webkit-tap-highlight-color: transparent; }
+        .font-toggle-btn:active, .music-toggle-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 #111; }
 
         .nav-container { overflow-x: auto; background: var(--card-bg); border-bottom: var(--pixel-border); position: sticky; top: 0; z-index: 10; -webkit-overflow-scrolling: touch; }
         .nav-container::-webkit-scrollbar { display: none; }
@@ -283,8 +286,9 @@
 </head>
 <body>
 
-    <!-- 頂部切換字體按鈕區塊 -->
+    <!-- 頂部切換字體與音樂按鈕區塊 -->
     <div class="top-bar">
+        <button id="musicToggleBtn" class="music-toggle-btn">🔇 音樂 (關)</button>
         <button id="fontToggleBtn" class="font-toggle-btn">Aa 放大字體</button>
     </div>
 
@@ -351,15 +355,6 @@
                         <div class="stat-value" style="font-size: 13px;">Hotel Geometiq</div>
                         <div class="stat-label">住宿飯店</div>
                     </div>
-                </div>
-            </div>
-
-            <!-- 特別任務 -->
-            <div class="overview-card special-task">
-                <div class="special-task-icon">[GIFT]</div>
-                <div class="special-task-text">
-                    <div class="special-task-title">特別任務提醒</div>
-                    <div class="special-task-desc">出門玩得開心，但也別忘了要 <span>買伴手禮給行政們</span> 喔！</div>
                 </div>
             </div>
 
@@ -991,6 +986,137 @@
         let quarrels = { count: 0, logs: [] };
 
         // ==========================================
+        // 復古像素音效與背景音樂 (Tone.js)
+        // ==========================================
+        let bgmSynth, bgmSeq, bassSynth, bassSeq;
+        let clickSynth, punchSynth, explodeSynth;
+        let isMusicPlaying = false;
+        let audioInitialized = false;
+
+        async function initAudio() {
+            if (audioInitialized) return;
+            await Tone.start();
+
+            // 1. RPG 主旋律 (方波，清脆的冒險感)
+            bgmSynth = new Tone.Synth({
+                oscillator: { type: "square" },
+                envelope: { attack: 0.05, decay: 0.2, sustain: 0.2, release: 1 }
+            }).toDestination();
+            bgmSynth.volume.value = -12;
+
+            // 2. RPG 貝斯低音 (三角波，增加厚實的史詩感)
+            bassSynth = new Tone.Synth({
+                oscillator: { type: "triangle" },
+                envelope: { attack: 0.05, decay: 0.2, sustain: 0.2, release: 1 }
+            }).toDestination();
+            bassSynth.volume.value = -10;
+
+            // 經典 RPG 冒險大地圖旋律 (8分音符為單位)
+            const melodyNotes = [
+                "C5", null, "G4", "C5", "D5", null, null, null,
+                "E5", null, "C5", "G4", "C5", null, null, null,
+                "F5", null, "C5", "A4", "G4", null, "E4", "C4",
+                "D4", null, "E4", "F4", "G4", null, null, null
+            ];
+            
+            // 沉穩的步伐貝斯
+            const bassNotes = [
+                "C3", null, "C3", null, "G2", null, "G2", null,
+                "C3", null, "C3", null, "E3", null, "C3", null,
+                "F2", null, "F2", null, "C3", null, "C3", null,
+                "G2", null, "G2", null, "G2", null, "G2", null
+            ];
+
+            bgmSeq = new Tone.Sequence((time, note) => {
+                if (note) bgmSynth.triggerAttackRelease(note, "8n", time);
+            }, melodyNotes, "8n");
+
+            bassSeq = new Tone.Sequence((time, note) => {
+                if (note) bassSynth.triggerAttackRelease(note, "8n", time);
+            }, bassNotes, "8n");
+
+            Tone.Transport.bpm.value = 125; // 適合 RPG 走路探索的沉穩節奏
+
+            // 一般點擊按鈕的嗶聲
+            clickSynth = new Tone.Synth({
+                oscillator: { type: "square" },
+                envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }
+            }).toDestination();
+            clickSynth.volume.value = -15;
+
+            // 吵架增加：揍拳音效 (短促雜訊)
+            punchSynth = new Tone.NoiseSynth({
+                noise: { type: "brown" },
+                envelope: { attack: 0.01, decay: 0.2, sustain: 0, release: 0.2 }
+            }).toDestination();
+            punchSynth.volume.value = -2;
+
+            // 吵架破20次：爆炸音效 (加上失真效果的長雜訊)
+            const dist = new Tone.Distortion(0.8).toDestination();
+            explodeSynth = new Tone.NoiseSynth({
+                noise: { type: "brown" },
+                envelope: { attack: 0.01, decay: 1.5, sustain: 0, release: 1.5 }
+            }).connect(dist);
+            explodeSynth.volume.value = 5;
+
+            audioInitialized = true;
+        }
+
+        function playClick() {
+            if (audioInitialized && Tone.context.state === 'running') {
+                clickSynth.triggerAttackRelease("C6", "32n");
+            }
+        }
+
+        function playPunch() {
+            if (audioInitialized && Tone.context.state === 'running') {
+                punchSynth.triggerAttackRelease("16n");
+            }
+        }
+
+        function playExplosion() {
+            if (audioInitialized && Tone.context.state === 'running') {
+                explodeSynth.triggerAttackRelease("2n");
+            }
+        }
+
+        // 綁定全域點擊事件播放一般音效
+        document.addEventListener('click', async (e) => {
+            if (!audioInitialized) await initAudio();
+            
+            // 針對按鈕與折疊面板播放點擊音，但排除特定的音樂切換跟吵架+按鈕
+            const target = e.target;
+            const isButton = target.tagName === 'BUTTON' || target.closest('button') || target.tagName === 'SUMMARY';
+            const isQuarrelPlus = target.closest('.q-btn.plus');
+            const isMusicBtn = target.closest('#musicToggleBtn');
+            
+            if (isButton && !isQuarrelPlus && !isMusicBtn) {
+                playClick();
+            }
+        });
+
+        // 音樂切換按鈕邏輯
+        const musicToggleBtn = document.getElementById('musicToggleBtn');
+        musicToggleBtn.addEventListener('click', async () => {
+            if (!audioInitialized) await initAudio();
+            
+            if (isMusicPlaying) {
+                Tone.Transport.stop();
+                bgmSeq.stop();
+                if (bassSeq) bassSeq.stop();
+                isMusicPlaying = false;
+                musicToggleBtn.textContent = '🔇 音樂 (關)';
+            } else {
+                Tone.Transport.start();
+                bgmSeq.start(0);
+                if (bassSeq) bassSeq.start(0);
+                isMusicPlaying = true;
+                musicToggleBtn.textContent = '🔊 音樂 (開)';
+            }
+            playClick();
+        });
+
+        // ==========================================
         // 字體大小切換邏輯
         // ==========================================
         const fontToggleBtn = document.getElementById('fontToggleBtn');
@@ -1213,6 +1339,16 @@
         window.updateQuarrel = async function(change) {
             let newCount = quarrels.count + change;
             if (newCount < 0) newCount = 0;
+            
+            // 處理吵架專屬的揍拳與爆炸音效
+            if (change > 0) {
+                if (!audioInitialized) await initAudio();
+                if (newCount >= 20) {
+                    playExplosion();
+                } else {
+                    playPunch();
+                }
+            }
             
             if (db && currentUser) {
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'state', 'quarrel_stats'), { count: newCount });
