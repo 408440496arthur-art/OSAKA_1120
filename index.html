@@ -194,8 +194,10 @@
             position: relative;
             overflow: hidden;
             user-select: none;
+            -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
+            touch-action: none;
+            overscroll-behavior: none;
         }
         /* 草地像素裝飾小草叢 */
         .grass-tuft {
@@ -1600,35 +1602,36 @@
             }).toDestination();
             explosionSynth.volume.value = 0;
 
-            // 勇者出發探索大地圖 32 步交響曲 (132 BPM)
+            // 勇者出發探索大地圖 32 步無縫循環交響曲 (132 BPM，消除休止符斷點與時間軸誤差)
             Tone.Transport.bpm.value = 132;
             const leadNotes = [
-                "C5", null, "G4", "C5", "E5", null, "D5", "C5",
-                "G5", null, "E5", null, "C5", null, "G4", null,
-                "A4", null, "C5", "F5", "E5", null, "C5", "G4",
-                "D5", "E5", "F5", "D5", "G5", null, "G4", null
+                "C5", "D5", "E5", "C5", "G5", "E5", "D5", "C5",
+                "B4", "C5", "D5", "G4", "C5", "D5", "E5", "G5",
+                "A5", "G5", "F5", "C5", "G5", "F5", "E5", "C5",
+                "D5", "E5", "F5", "D5", "G5", "F5", "E5", "D5"
             ];
             const harmNotes = [
-                "E4", null, "E4", "E4", "G4", null, "F4", "E4",
-                "B4", null, "G4", null, "E4", null, null, null,
-                "C4", null, "F4", "A4", "G4", null, "E4", "C4",
-                "G4", "G4", "A4", "G4", "B4", null, "B3", null
+                "E4", "F4", "G4", "E4", "B4", "G4", "F4", "E4",
+                "G4", "A4", "B4", "D4", "E4", "G4", "C5", "E5",
+                "F5", "E5", "C5", "A4", "E5", "D5", "C5", "G4",
+                "B4", "C5", "D5", "B4", "B4", "D5", "C5", "B4"
             ];
             const bassNotes = [
                 "C3", "G2", "C3", "G2", "C3", "G2", "C3", "G2",
-                "E3", "B2", "E3", "B2", "C3", "G2", "C3", "E2",
-                "F2", "C3", "F2", "C3", "C3", "G2", "C3", "G2",
-                "G2", "D3", "G2", "D3", "G2", "D2", "G2", null
+                "G2", "D3", "G2", "D3", "C3", "G2", "E2", "G2",
+                "F2", "C3", "F2", "C3", "C3", "G2", "C3", "E3",
+                "G2", "D3", "G2", "D3", "G2", "A2", "B2", "D3"
             ];
 
             let step = 0;
             rpgLoop = new Tone.Loop((time) => {
                 const idx = step % 32;
-                if (leadNotes[idx]) safePlayNote(leadSynth, leadNotes[idx], "16n", time);
-                if (harmNotes[idx]) safePlayNote(harmonySynth, harmNotes[idx], "16n", time);
-                if (bassNotes[idx]) safePlayNote(bassSynth, bassNotes[idx], "8n", time);
-                if (idx % 4 === 0 || idx % 4 === 2 || idx % 8 === 7) {
-                    safePlayNoise(drumNoise, "32n", time);
+                // BGM 專屬合成器直接使用 WebAudio 精準時間軸 time，確保節拍 100% 滑順不卡頓
+                if (leadNotes[idx]) leadSynth.triggerAttackRelease(leadNotes[idx], "16n", time);
+                if (harmNotes[idx]) harmonySynth.triggerAttackRelease(harmNotes[idx], "16n", time);
+                if (bassNotes[idx]) bassSynth.triggerAttackRelease(bassNotes[idx], "8n", time);
+                if (idx % 2 === 0 || idx % 8 === 7) {
+                    drumNoise.triggerAttackRelease("32n", time);
                 }
                 step++;
             }, "8n").start(0);
@@ -2339,18 +2342,18 @@
                             bestSlime = s;
                         }
                     });
-                    if (bestSlime) {
+                    if (bestSlime && bestDist < 180) {
                         targetX = bestSlime.x + 30;
                         targetY = bestSlime.y + 26;
                     }
                 }
 
-                playerState.facing = targetX >= pCenterX ? 1 : -1;
-
-                const dx = targetX - pCenterX;
-                const dy = targetY - pCenterY;
+                const startX = playerState.x + 16;
+                const startY = playerState.y + 20;
+                const dx = targetX - startX;
+                const dy = targetY - startY;
                 const dist = Math.hypot(dx, dy) || 1;
-                const speed = 8.5;
+                const speed = 7.5;
 
                 const fbEl = document.createElement('div');
                 fbEl.className = 'fireball-entity';
@@ -2360,75 +2363,111 @@
 
                 activeFireballs.push({
                     el: fbEl,
-                    x: pCenterX - 16,
-                    y: pCenterY - 16,
+                    x: startX,
+                    y: startY,
                     vx: (dx / dist) * speed,
                     vy: (dy / dist) * speed
                 });
             }
         }
 
-        // 綁定草地競技場「拖曳移動、點擊攻擊」事件
+        // 綁定草地競技場「拖曳移動、點擊攻擊」事件 (支援手機觸控防滑動與滑鼠拖曳)
         (function setupArenaControls() {
             const arena = document.getElementById('slime-arena');
             if (!arena) return;
 
             let dragInfo = {
                 active: false,
-                pointerId: null,
                 lastX: 0,
                 lastY: 0,
                 totalMoved: 0
             };
 
-            arena.addEventListener('pointerdown', (e) => {
-                if (!gameActive || e.target.closest('#slime-overlay')) return;
-                e.preventDefault();
-                arena.setPointerCapture(e.pointerId);
+            function startControl(clientX, clientY) {
                 dragInfo.active = true;
-                dragInfo.pointerId = e.pointerId;
-                dragInfo.lastX = e.clientX;
-                dragInfo.lastY = e.clientY;
+                dragInfo.lastX = clientX;
+                dragInfo.lastY = clientY;
                 dragInfo.totalMoved = 0;
-            });
+            }
 
-            arena.addEventListener('pointermove', (e) => {
-                if (!dragInfo.active || e.pointerId !== dragInfo.pointerId || !gameActive || !playerState) return;
-                const dx = e.clientX - dragInfo.lastX;
-                const dy = e.clientY - dragInfo.lastY;
-                dragInfo.lastX = e.clientX;
-                dragInfo.lastY = e.clientY;
+            function moveControl(clientX, clientY) {
+                if (!dragInfo.active || !gameActive || !playerState) return;
+                const dx = (clientX - dragInfo.lastX) * 1.25;
+                const dy = (clientY - dragInfo.lastY) * 1.25;
+                dragInfo.lastX = clientX;
+                dragInfo.lastY = clientY;
                 const stepDist = Math.hypot(dx, dy);
                 dragInfo.totalMoved += stepDist;
 
-                if (stepDist > 0.3) {
+                if (stepDist > 0.2) {
                     const rect = arena.getBoundingClientRect();
                     playerState.x = Math.max(4, Math.min(rect.width - 68, playerState.x + dx));
                     playerState.y = Math.max(30, Math.min(rect.height - 74, playerState.y + dy));
-                    if (Math.abs(dx) > 0.6) {
+                    if (Math.abs(dx) > 0.4) {
                         playerState.facing = dx > 0 ? 1 : -1;
                     }
                     playerState.isMoving = true;
                     playerState.lastMoveTime = performance.now();
                 }
-            });
+            }
 
-            function endPointer(e) {
-                if (!dragInfo.active || e.pointerId !== dragInfo.pointerId) return;
+            function endControl(clientX, clientY) {
+                if (!dragInfo.active) return;
                 dragInfo.active = false;
                 if (playerState) playerState.isMoving = false;
 
-                // 若手指/滑鼠移動距離小於 12px，視為「點擊攻擊」
-                if (dragInfo.totalMoved < 12 && gameActive) {
+                // 若手指/滑鼠移動距離小於 14px，視為「點擊攻擊」
+                if (dragInfo.totalMoved < 14 && gameActive) {
                     const rect = arena.getBoundingClientRect();
-                    const tapX = e.clientX - rect.left;
-                    const tapY = e.clientY - rect.top;
+                    const tapX = clientX - rect.left;
+                    const tapY = clientY - rect.top;
                     triggerPlayerAttack(tapX, tapY);
                 }
             }
 
-            arena.addEventListener('pointerup', endPointer);
-            arena.addEventListener('pointercancel', endPointer);
+            // 手機原生觸控事件 (強制攔截瀏覽器上下捲動畫面)
+            arena.addEventListener('touchstart', (e) => {
+                if (!gameActive || e.target.closest('#slime-overlay')) return;
+                if (e.cancelable) e.preventDefault();
+                const touch = e.touches[0];
+                startControl(touch.clientX, touch.clientY);
+            }, { passive: false });
+
+            arena.addEventListener('touchmove', (e) => {
+                if (!dragInfo.active || !gameActive) return;
+                if (e.cancelable) e.preventDefault();
+                const touch = e.touches[0];
+                moveControl(touch.clientX, touch.clientY);
+            }, { passive: false });
+
+            arena.addEventListener('touchend', (e) => {
+                if (!dragInfo.active) return;
+                if (e.cancelable) e.preventDefault();
+                const touch = e.changedTouches[0];
+                endControl(touch.clientX, touch.clientY);
+            }, { passive: false });
+
+            arena.addEventListener('touchcancel', () => {
+                dragInfo.active = false;
+                if (playerState) playerState.isMoving = false;
+            });
+
+            // 電腦滑鼠事件
+            arena.addEventListener('mousedown', (e) => {
+                if (!gameActive || e.target.closest('#slime-overlay')) return;
+                e.preventDefault();
+                startControl(e.clientX, e.clientY);
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!dragInfo.active) return;
+                moveControl(e.clientX, e.clientY);
+            });
+
+            window.addEventListener('mouseup', (e) => {
+                if (!dragInfo.active) return;
+                endControl(e.clientX, e.clientY);
+            });
         })();
 
         function createMovingSlime() {
