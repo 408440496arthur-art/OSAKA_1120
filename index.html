@@ -50,6 +50,423 @@
         header h1 { margin: 0; font-size: 26px; font-weight: bold; letter-spacing: 2px; text-shadow: 2px 2px 0px #111; }
         header p { margin: 10px 0 0; font-size: 14px; letter-spacing: 1px; font-weight: bold; text-shadow: 1px 1px 0px #111; }
         
+        /* ==================== 開始畫面 (Start Screen) ==================== */
+        #start-screen {
+            position: fixed;
+            inset: 0;
+            background-color: #103285;
+            background-image: 
+                radial-gradient(rgba(255,255,255,0.06) 2px, transparent 0),
+                radial-gradient(rgba(0,0,0,0.12) 2px, transparent 0);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+            z-index: 9000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: opacity 0.4s steps(4);
+        }
+        .start-logo-wrapper {
+            position: relative;
+            width: 82%;
+            max-width: 340px;
+            margin-bottom: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* 純 CSS 8-bit 復古立體漸層主標題 */
+        .pixel-hero-title {
+            font-size: 62px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.15;
+            letter-spacing: 6px;
+            background: linear-gradient(180deg, #ff4500 0%, #ff8800 35%, #ffdd44 70%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: 
+                drop-shadow(0px 3px 0px #b32400)
+                drop-shadow(0px 6px 0px #801500)
+                drop-shadow(0px 9px 0px #111111);
+            position: relative;
+            padding: 6px 12px;
+        }
+        .studio-credit {
+            color: #ffffff;
+            font-size: 16px;
+            letter-spacing: 2px;
+            margin-bottom: 90px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-shadow: 2px 2px 0 #111;
+        }
+        .pixel-c-badge {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 22px; height: 22px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            font-size: 12px;
+            box-shadow: 2px 2px 0 #111;
+        }
+        .tap-to-start {
+            color: #ffffff;
+            font-size: 20px;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 0 #111;
+            animation: slowFade 2.2s ease-in-out infinite;
+            padding: 12px 24px;
+        }
+        .start-bgm-hint {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(6, 24, 74, 0.75);
+            color: #fff;
+            border: 2px solid #fff;
+            padding: 6px 12px;
+            font-size: 12px;
+            box-shadow: 2px 2px 0 #000;
+        }
+        @keyframes slowFade {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.15; }
+        }
+        /* 進入 App 後上方的純像素主標題 */
+        .pixel-header-logo {
+            display: inline-block;
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            line-height: 1.2;
+            background: linear-gradient(180deg, #ff5500 0%, #ffaa00 48%, #ffffbb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 3px 0px #991100) drop-shadow(3px 3px 0px #111111);
+            margin: 0;
+        }
+
+        /* ==================== 史萊姆消氣小遊戲樣式 (全畫面草地版) ==================== */
+        .slime-full-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 225px);
+            min-height: 460px;
+            background: var(--card-bg);
+            border: var(--pixel-border);
+            box-shadow: var(--pixel-shadow);
+            padding: 12px;
+        }
+        .slime-hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111;
+            color: #fff;
+            padding: 10px 14px;
+            border: 2px solid #111;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .slime-arena {
+            flex: 1;
+            width: 100%;
+            /* 8-bit 像素綠茵草地背景 */
+            background-color: #56b038;
+            background-image: 
+                radial-gradient(#74d14c 3px, transparent 3px),
+                radial-gradient(#3e8c24 3px, transparent 3px),
+                radial-gradient(#ffe64d 2px, transparent 2px),
+                linear-gradient(180deg, rgba(0,0,0,0.12) 0%, transparent 18%, transparent 85%, rgba(0,0,0,0.18) 100%);
+            background-size: 32px 32px, 48px 48px, 96px 96px, 100% 100%;
+            background-position: 0 0, 16px 20px, 40px 12px, 0 0;
+            border: var(--pixel-border);
+            box-shadow: inset 4px 4px 0 rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        /* 草地像素裝飾小草叢 */
+        .grass-tuft {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.85;
+        }
+        .slime-entity {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 60px;
+            height: 52px;
+            cursor: pointer;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .slime-sprite {
+            pointer-events: none;
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.45));
+            will-change: transform;
+        }
+        .slime-shadow {
+            width: 42px;
+            height: 10px;
+            background: rgba(15, 45, 10, 0.45);
+            border-radius: 50%;
+            margin-top: -4px;
+            pointer-events: none;
+            will-change: transform;
+        }
+        .boss-entity {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 130px;
+            height: 150px;
+            cursor: pointer;
+            z-index: 8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .boss-shadow {
+            width: 96px;
+            height: 18px;
+            background: rgba(15, 45, 10, 0.55);
+            border-radius: 50%;
+            margin-top: -8px;
+            pointer-events: none;
+        }
+        .boss-hit-flash {
+            filter: brightness(2.5) contrast(1.6) drop-shadow(4px 4px 0px rgba(0,0,0,0.6)) !important;
+        }
+        .boss-hp-wrapper {
+            position: absolute;
+            top: 12px; left: 50%;
+            transform: translateX(-50%);
+            width: 88%;
+            z-index: 15;
+            display: none;
+            text-align: center;
+            pointer-events: none;
+        }
+        .boss-hp-title {
+            color: #fff;
+            background: rgba(17, 17, 17, 0.8);
+            display: inline-block;
+            padding: 3px 10px;
+            font-size: 13px;
+            font-weight: bold;
+            border: 2px solid #fff;
+            margin-bottom: 6px;
+        }
+        .boss-hp-bar-bg {
+            width: 100%; height: 16px;
+            background: #222;
+            border: 2px solid #fff;
+            box-shadow: 3px 3px 0 #111;
+        }
+        .boss-hp-bar-fill {
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, #ff1111, #ff8800);
+            transition: width 0.08s;
+        }
+        .hit-dmg-text {
+            position: absolute;
+            color: #fff;
+            background: #ff3300;
+            border: 2px solid #111;
+            padding: 1px 6px;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 2px 2px 0 #111;
+            pointer-events: none;
+            z-index: 20;
+            animation: floatUpFade 0.5s steps(4) forwards;
+        }
+        @keyframes floatUpFade {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-30px) scale(1.2); }
+        }
+
+        /* ==================== CSS 像素角色與戰鬥特效樣式 ==================== */
+        .char-select-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+            max-width: 380px;
+            margin-bottom: 16px;
+        }
+        .char-card {
+            background: rgba(17, 17, 17, 0.85);
+            border: 3px solid #fff;
+            padding: 12px 8px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.1s, border-color 0.1s, background 0.1s;
+            box-shadow: 4px 4px 0 #111;
+        }
+        .char-card.selected {
+            border-color: var(--accent-color);
+            background: rgba(24, 60, 146, 0.95);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #111;
+        }
+        .char-card-title {
+            color: #ffdd00;
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 8px;
+            text-shadow: 2px 2px 0 #111;
+        }
+        .char-card-desc {
+            color: #fff;
+            font-size: 11px;
+            margin-top: 4px;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+        /* 純 CSS box-shadow 像素畫布容器 */
+        .css-pixel-box {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            display: inline-block;
+            pointer-events: none;
+        }
+        .css-pixel-dots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 4px;
+            background: transparent;
+            transform: translate(-4px, -4px);
+            filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5));
+        }
+        /* 場上玩家角色實體 */
+        .player-entity {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 64px;
+            height: 70px;
+            z-index: 12;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            will-change: transform;
+        }
+        .player-sprite-wrap {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            will-change: transform;
+            transition: transform 0.06s;
+        }
+        /* 跑步時的腳底像素揚塵特效 */
+        .run-dust {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: 4px -2px 0 rgba(220, 240, 200, 0.6);
+            pointer-events: none;
+            z-index: 11;
+            animation: dustFade 0.35s steps(3) forwards;
+        }
+        @keyframes dustFade {
+            0% { opacity: 0.9; transform: translateY(0) scale(0.8); }
+            100% { opacity: 0; transform: translateY(-10px) scale(1.5); }
+        }
+        .player-shadow {
+            width: 44px;
+            height: 12px;
+            background: rgba(10, 35, 8, 0.55);
+            border-radius: 50%;
+            margin-top: -6px;
+        }
+        /* 勇者近戰揮砍 CSS 像素劍氣 */
+        .sword-slash-fx {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            top: 4px;
+            right: -34px;
+            pointer-events: none;
+            z-index: 14;
+            animation: slashPop 0.22s steps(3) forwards;
+        }
+        .sword-slash-dots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 4px;
+            transform: translate(-4px, -4px);
+            filter: drop-shadow(2px 2px 0 #111);
+        }
+        @keyframes slashPop {
+            0% { opacity: 1; transform: scale(0.6) rotate(-25deg); }
+            50% { opacity: 1; transform: scale(1.15) rotate(10deg); }
+            100% { opacity: 0; transform: scale(1.3) rotate(35deg); }
+        }
+        /* 法師遠程 CSS 像素火球 */
+        .fireball-entity {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            pointer-events: none;
+            z-index: 13;
+            will-change: transform;
+        }
+        .fireball-dots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 4px;
+            transform: translate(-4px, -4px);
+            filter: drop-shadow(2px 2px 0 rgba(180, 0, 0, 0.8));
+        }
+        .arena-control-hint {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(17, 17, 17, 0.72);
+            color: #fff;
+            border: 1px solid #fff;
+            padding: 3px 10px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 10;
+            white-space: nowrap;
+        }
+        
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: var(--primary-color); }
         .font-toggle-btn, .music-toggle-btn { background: #fff; border: 2px solid #111; box-shadow: 2px 2px 0 #111; padding: 6px 12px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.1s; color: #111; -webkit-tap-highlight-color: transparent; }
         .font-toggle-btn:active, .music-toggle-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 #111; }
@@ -201,12 +618,45 @@
         .delete-btn { background: var(--accent-color); color: white; border: 2px solid #111; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; margin-left: 15px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 2px 2px 0 #111; transition: 0.1s; }
         .delete-btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 #111; }
 
-        /* 吵架計數器專屬樣式 */
-        .quarrel-header { text-align: center; padding: 25px 0; border-left: 8px solid #111; }
-        .fight-emoji { font-size: 3.5rem; text-align: center; margin: 15px 0; }
-        .quarrel-count { font-size: 72px; font-weight: bold; color: var(--text-color); line-height: 1; margin: 15px 0; text-shadow: 4px 4px 0px #ccc; }
-        .quarrel-btn-group { display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; }
-        .q-btn { width: 64px; height: 64px; border: 2px solid #111; font-size: 32px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 4px 4px 0 #111; transition: 0.1s; -webkit-tap-highlight-color: transparent; }
+        /* 吵架計數器專屬樣式 (固定高度與禁止雙擊縮放，防止連按時畫面浮動) */
+        .quarrel-header { text-align: center; padding: 25px 15px; border-left: 8px solid #111; user-select: none; }
+        .fight-emoji { 
+            font-size: 2.8rem; 
+            height: 72px; 
+            line-height: 72px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 10px 0; 
+            white-space: nowrap; 
+            overflow: hidden; 
+        }
+        .quarrel-count { 
+            font-size: 72px; 
+            height: 80px; 
+            line-height: 80px; 
+            font-weight: bold; 
+            color: var(--text-color); 
+            margin: 10px 0; 
+            text-shadow: 4px 4px 0px #ccc; 
+        }
+        .quarrel-btn-group { display: flex; justify-content: center; gap: 25px; margin-bottom: 20px; }
+        .q-btn { 
+            width: 64px; 
+            height: 64px; 
+            border: 2px solid #111; 
+            font-size: 32px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 4px 4px 0 #111; 
+            transition: transform 0.05s, box-shadow 0.05s; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; 
+            user-select: none; 
+        }
         .q-btn.minus { background: #fff; color: #111; }
         .q-btn.plus { background: #111; color: white; }
         .q-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 #111; }
@@ -286,6 +736,19 @@
 </head>
 <body>
 
+    <!-- 復古遊戲開始畫面 (上一版居中排版 + 像素漸層掃光動畫) -->
+    <div id="start-screen" onclick="handleStartScreenTap(event)">
+        <div id="start-bgm-hint" class="start-bgm-hint" onclick="toggleStartScreenBGM(event)">🔇 點擊播放啟程配樂</div>
+        <div class="start-logo-wrapper">
+            <div class="pixel-hero-title">秋日<br>大作戰</div>
+        </div>
+        <div class="studio-credit">
+            <span class="pixel-c-badge">C</span>
+            <span>shiyoku studio</span>
+        </div>
+        <div class="tap-to-start" onclick="enterApp(event)">tap to start</div>
+    </div>
+
     <!-- 頂部切換字體與音樂按鈕區塊 -->
     <div class="top-bar">
         <button id="musicToggleBtn" class="music-toggle-btn">🔇 音樂 (關)</button>
@@ -293,7 +756,7 @@
     </div>
 
     <header>
-        <h1>★ 秋日大作戰</h1>
+        <div class="pixel-header-logo">★ 秋日大作戰</div>
         <p>2026.11.15 - 11.20</p>
     </header>
 
@@ -315,6 +778,14 @@
         <div class="nav-tabs">
             <button class="tab-btn" onclick="showDay('shops', this)">[SHOP] 逛店推薦<br><small>Shopping</small></button>
             <button class="tab-btn" onclick="showDay('food', this)">[FOOD] 美食推薦<br><small>Tabelog</small></button>
+        </div>
+    </div>
+
+    <!-- [X] 吵架專屬子選單 (預設隱藏，分為吵架紀錄與消氣遊戲兩大項) -->
+    <div class="nav-container sub-nav-group" id="sub-nav-X" style="display: none;">
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showDay('quarrel', this)">[VS] 吵架紀錄<br><small>Quarrels</small></button>
+            <button class="tab-btn" onclick="showDay('slime-game', this)">[GAME] 消氣遊戲<br><small>Slime Hunt</small></button>
         </div>
     </div>
 
@@ -865,31 +1336,39 @@
 
             <div class="expense-summary">
                 <div class="expense-card">
-                    <h3>總花費 (日幣)</h3>
+                    <h3>總花費 (折合日幣)</h3>
                     <div class="amount" id="total-jpy">¥0</div>
                 </div>
                 <div class="expense-card">
-                    <h3>總花費 (台幣)</h3>
+                    <h3>總花費 (折合台幣)</h3>
                     <div class="amount" id="total-twd">NT$0</div>
                 </div>
                 <div class="expense-card">
-                    <h3>羊隻 (JPY)</h3>
-                    <div class="amount" id="me-jpy" style="font-size: 16px; color: #666;">¥0</div>
+                    <h3>羊隻 墊付總額</h3>
+                    <div class="amount" id="me-jpy" style="font-size: 16px; color: var(--primary-color);">¥0</div>
+                    <div id="me-twd" style="font-size: 12px; color: #666; margin-top: 4px; font-weight: bold;">(約 NT$0)</div>
                 </div>
                 <div class="expense-card">
-                    <h3>臭人 (JPY)</h3>
-                    <div class="amount" id="gf-jpy" style="font-size: 16px; color: #666;">¥0</div>
+                    <h3>臭人 墊付總額</h3>
+                    <div class="amount" id="gf-jpy" style="font-size: 16px; color: var(--primary-color);">¥0</div>
+                    <div id="gf-twd" style="font-size: 12px; color: #666; margin-top: 4px; font-weight: bold;">(約 NT$0)</div>
                 </div>
             </div>
 
             <div class="expense-form">
                 <div class="form-group">
                     <label>項目名稱</label>
-                    <input type="text" id="exp-name" placeholder="例如: 晚餐、車票、伴手禮">
+                    <input type="text" id="exp-name" placeholder="例如: 晚餐、車票、機票、伴手禮">
                 </div>
                 <div class="form-group">
-                    <label>花費金額 (日幣 ¥)</label>
-                    <input type="number" id="exp-amount" placeholder="輸入日幣金額">
+                    <label>消費幣別與金額</label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="exp-currency" style="width: 125px; font-weight: bold;">
+                            <option value="JPY">🇯🇵 日幣 (¥)</option>
+                            <option value="TWD">🇹🇼 台幣 ($)</option>
+                        </select>
+                        <input type="number" id="exp-amount" placeholder="輸入金額" style="flex: 1; min-width: 0;">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>這筆是誰先付的？</label>
@@ -940,6 +1419,50 @@
             </div>
         </div>
 
+        <!-- 獨立全畫面分頁：消氣專用「爆打草地史萊姆」小遊戲 -->
+        <div id="slime-game" class="day-panel">
+            <div class="slime-full-wrapper">
+                <div class="slime-hud">
+                    <span id="slime-hud-role">⚔️ 草原消氣大作戰</span>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span id="slime-score-display" style="color: #ffdd00;">SCORE: 0 / 30</span>
+                        <button onclick="openCharSelect()" style="background:#fff; color:#111; border:2px solid #111; padding:2px 6px; font-size:11px; font-weight:bold; cursor:pointer;">換角</button>
+                    </div>
+                </div>
+                <div id="slime-arena" class="slime-arena">
+                    <!-- 史萊姆王血條 -->
+                    <div id="boss-hp-wrapper" class="boss-hp-wrapper">
+                        <div class="boss-hp-title">👑 憤怒化身：紅色史萊姆王 (HP: <span id="boss-hp-text">20</span>/20)</div>
+                        <div class="boss-hp-bar-bg">
+                            <div id="boss-hp-bar-fill" class="boss-hp-bar-fill"></div>
+                        </div>
+                    </div>
+                    <!-- 操控提示 -->
+                    <div class="arena-control-hint">🖐️ 拖曳畫面移動角色 ｜ 💥 點擊畫面發動攻擊</div>
+                    <!-- 遊戲開始/角色選擇/過關覆蓋層 -->
+                    <div id="slime-overlay" style="position:absolute; inset:0; background:rgba(16, 45, 14, 0.9); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:30; padding:16px; text-align:center;">
+                        <div id="slime-overlay-msg" style="color:#fff; font-weight:bold; margin-bottom:12px; font-size:15px; text-shadow:2px 2px 0 #111; line-height:1.5;">
+                            請選擇出戰角色！<br><span style="font-size:12px; color:#ffdd99;">拖曳畫面移動，點擊發動攻擊（滿 30 分召喚史萊姆王）</span>
+                        </div>
+                        <!-- CSS 像素角色選擇卡片 -->
+                        <div class="char-select-grid">
+                            <div id="char-card-hero" class="char-card selected" onclick="selectCharacter('hero', event)">
+                                <div class="css-pixel-box"><div id="preview-hero-dots" class="css-pixel-dots"></div></div>
+                                <div class="char-card-title">⚔️ 持劍勇者</div>
+                                <div class="char-card-desc">【近距離劍氣揮砍】</div>
+                            </div>
+                            <div id="char-card-mage" class="char-card" onclick="selectCharacter('mage', event)">
+                                <div class="css-pixel-box"><div id="preview-mage-dots" class="css-pixel-dots"></div></div>
+                                <div class="char-card-title">🪄 烈焰法師</div>
+                                <div class="char-card-desc">【遠程發射像素火球】</div>
+                            </div>
+                        </div>
+                        <button class="add-btn" style="margin:0; background:var(--accent-color); padding:10px 26px; font-size:16px;" onclick="startSlimeGame(event)">▶ 出發消氣</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- 像素轉場遮罩 -->
@@ -970,8 +1493,6 @@
         // 雲端同步與全域變數設定
         // ==========================================
         const appId = 'osaka-trip-sync';
-        
-        // 這是你專屬的 Firebase 雲端資料庫設定！
         const firebaseConfig = {
             apiKey: "AIzaSyB37gqJfeiiJTE2Q3eobVxmZnvjkC751UA",
             authDomain: "osaka-46c80.firebaseapp.com",
@@ -986,134 +1507,225 @@
         let quarrels = { count: 0, logs: [] };
 
         // ==========================================
-        // 復古像素音效與背景音樂 (Tone.js)
+        // 8-bit 復古音效與四聲道 RPG 大地圖音樂引擎 (Tone.js)
         // ==========================================
-        let bgmSynth, bgmSeq, bassSynth, bassSeq;
-        let clickSynth, punchSynth, explodeSynth;
         let isMusicPlaying = false;
         let audioInitialized = false;
+        let leadSynth, harmonySynth, bassSynth, drumNoise, sfxSynth, punchSynth, explosionSynth;
+        let rpgLoop;
+
+        // 安全排程輔助函式：確保傳入 Tone.js 的時間永遠大於上一次排程時間，避免時間軸衝突報錯
+        function safePlayNote(synth, note, duration, time) {
+            if (!synth) return;
+            try {
+                const now = Tone.now();
+                let t = (time !== undefined) ? Math.max(time, now) : now;
+                if (synth._lastScheduledTime !== undefined && t <= synth._lastScheduledTime) {
+                    t = synth._lastScheduledTime + 0.005;
+                }
+                synth._lastScheduledTime = t;
+                synth.triggerAttackRelease(note, duration, t);
+            } catch (err) {
+                // 忽略極端併發下的音效排程衝突
+            }
+        }
+
+        function safePlayNoise(noiseSynth, duration, time) {
+            if (!noiseSynth) return;
+            try {
+                const now = Tone.now();
+                let t = (time !== undefined) ? Math.max(time, now) : now;
+                if (noiseSynth._lastScheduledTime !== undefined && t <= noiseSynth._lastScheduledTime) {
+                    t = noiseSynth._lastScheduledTime + 0.005;
+                }
+                noiseSynth._lastScheduledTime = t;
+                noiseSynth.triggerAttackRelease(duration, t);
+            } catch (err) {
+                // 忽略極端併發下的音效排程衝突
+            }
+        }
 
         async function initAudio() {
             if (audioInitialized) return;
             await Tone.start();
 
-            // 1. RPG 主旋律 (方波，清脆的冒險感)
-            bgmSynth = new Tone.Synth({
+            // 1. 主奏號角 (方波)
+            leadSynth = new Tone.Synth({
                 oscillator: { type: "square" },
-                envelope: { attack: 0.05, decay: 0.2, sustain: 0.2, release: 1 }
+                envelope: { attack: 0.01, decay: 0.12, sustain: 0.4, release: 0.1 }
             }).toDestination();
-            bgmSynth.volume.value = -12;
+            leadSynth.volume.value = -11;
 
-            // 2. RPG 貝斯低音 (三角波，增加厚實的史詩感)
+            // 2. 副旋律和聲 (脈衝波)
+            harmonySynth = new Tone.Synth({
+                oscillator: { type: "pulse", width: 0.25 },
+                envelope: { attack: 0.01, decay: 0.1, sustain: 0.25, release: 0.1 }
+            }).toDestination();
+            harmonySynth.volume.value = -15;
+
+            // 3. 大地圖行進貝斯 (三角波)
             bassSynth = new Tone.Synth({
                 oscillator: { type: "triangle" },
-                envelope: { attack: 0.05, decay: 0.2, sustain: 0.2, release: 1 }
+                envelope: { attack: 0.01, decay: 0.1, sustain: 0.5, release: 0.1 }
             }).toDestination();
-            bassSynth.volume.value = -10;
+            bassSynth.volume.value = -8;
 
-            // 經典 RPG 冒險大地圖旋律 (8分音符為單位)
-            const melodyNotes = [
-                "C5", null, "G4", "C5", "D5", null, null, null,
-                "E5", null, "C5", "G4", "C5", null, null, null,
-                "F5", null, "C5", "A4", "G4", null, "E4", "C4",
-                "D4", null, "E4", "F4", "G4", null, null, null
-            ];
-            
-            // 沉穩的步伐貝斯
-            const bassNotes = [
-                "C3", null, "C3", null, "G2", null, "G2", null,
-                "C3", null, "C3", null, "E3", null, "C3", null,
-                "F2", null, "F2", null, "C3", null, "C3", null,
-                "G2", null, "G2", null, "G2", null, "G2", null
-            ];
+            // 4. 8-bit 進行曲小鼓 (白噪音)
+            drumNoise = new Tone.NoiseSynth({
+                noise: { type: "white" },
+                envelope: { attack: 0.001, decay: 0.06, sustain: 0 }
+            }).toDestination();
+            drumNoise.volume.value = -16;
 
-            bgmSeq = new Tone.Sequence((time, note) => {
-                if (note) bgmSynth.triggerAttackRelease(note, "8n", time);
-            }, melodyNotes, "8n");
-
-            bassSeq = new Tone.Sequence((time, note) => {
-                if (note) bassSynth.triggerAttackRelease(note, "8n", time);
-            }, bassNotes, "8n");
-
-            Tone.Transport.bpm.value = 125; // 適合 RPG 走路探索的沉穩節奏
-
-            // 一般點擊按鈕的嗶聲
-            clickSynth = new Tone.Synth({
+            // 點擊音效
+            sfxSynth = new Tone.Synth({
                 oscillator: { type: "square" },
-                envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }
+                envelope: { attack: 0.001, decay: 0.06, sustain: 0, release: 0.01 }
             }).toDestination();
-            clickSynth.volume.value = -15;
+            sfxSynth.volume.value = -8;
 
-            // 吵架增加：揍拳音效 (短促雜訊)
-            punchSynth = new Tone.NoiseSynth({
-                noise: { type: "brown" },
-                envelope: { attack: 0.01, decay: 0.2, sustain: 0, release: 0.2 }
+            // 揍拳音效
+            punchSynth = new Tone.MembraneSynth({
+                pitchDecay: 0.06,
+                octaves: 4,
+                oscillator: { type: "square" },
+                envelope: { attack: 0.001, decay: 0.18, sustain: 0, release: 0.05 }
             }).toDestination();
-            punchSynth.volume.value = -2;
+            punchSynth.volume.value = -3;
 
-            // 吵架破20次：爆炸音效 (加上失真效果的長雜訊)
-            const dist = new Tone.Distortion(0.8).toDestination();
-            explodeSynth = new Tone.NoiseSynth({
+            // 第 21 次以上爆炸音效
+            explosionSynth = new Tone.NoiseSynth({
                 noise: { type: "brown" },
-                envelope: { attack: 0.01, decay: 1.5, sustain: 0, release: 1.5 }
-            }).connect(dist);
-            explodeSynth.volume.value = 5;
+                envelope: { attack: 0.005, decay: 0.65, sustain: 0.1, release: 0.3 }
+            }).toDestination();
+            explosionSynth.volume.value = 0;
+
+            // 勇者出發探索大地圖 32 步交響曲 (132 BPM)
+            Tone.Transport.bpm.value = 132;
+            const leadNotes = [
+                "C5", null, "G4", "C5", "E5", null, "D5", "C5",
+                "G5", null, "E5", null, "C5", null, "G4", null,
+                "A4", null, "C5", "F5", "E5", null, "C5", "G4",
+                "D5", "E5", "F5", "D5", "G5", null, "G4", null
+            ];
+            const harmNotes = [
+                "E4", null, "E4", "E4", "G4", null, "F4", "E4",
+                "B4", null, "G4", null, "E4", null, null, null,
+                "C4", null, "F4", "A4", "G4", null, "E4", "C4",
+                "G4", "G4", "A4", "G4", "B4", null, "B3", null
+            ];
+            const bassNotes = [
+                "C3", "G2", "C3", "G2", "C3", "G2", "C3", "G2",
+                "E3", "B2", "E3", "B2", "C3", "G2", "C3", "E2",
+                "F2", "C3", "F2", "C3", "C3", "G2", "C3", "G2",
+                "G2", "D3", "G2", "D3", "G2", "D2", "G2", null
+            ];
+
+            let step = 0;
+            rpgLoop = new Tone.Loop((time) => {
+                const idx = step % 32;
+                if (leadNotes[idx]) safePlayNote(leadSynth, leadNotes[idx], "16n", time);
+                if (harmNotes[idx]) safePlayNote(harmonySynth, harmNotes[idx], "16n", time);
+                if (bassNotes[idx]) safePlayNote(bassSynth, bassNotes[idx], "8n", time);
+                if (idx % 4 === 0 || idx % 4 === 2 || idx % 8 === 7) {
+                    safePlayNoise(drumNoise, "32n", time);
+                }
+                step++;
+            }, "8n").start(0);
 
             audioInitialized = true;
         }
 
-        function playClick() {
-            if (audioInitialized && Tone.context.state === 'running') {
-                clickSynth.triggerAttackRelease("C6", "32n");
+        function updateMusicUI() {
+            const musicBtn = document.getElementById('musicToggleBtn');
+            const hintBtn = document.getElementById('start-bgm-hint');
+            if (isMusicPlaying) {
+                if (musicBtn) {
+                    musicBtn.textContent = '🔊 音樂 (開)';
+                    musicBtn.style.background = 'var(--accent-color)';
+                    musicBtn.style.color = '#fff';
+                }
+                if (hintBtn) hintBtn.textContent = '🔊 勇者啟程配樂播放中';
+            } else {
+                if (musicBtn) {
+                    musicBtn.textContent = '🔇 音樂 (關)';
+                    musicBtn.style.background = '#fff';
+                    musicBtn.style.color = '#111';
+                }
+                if (hintBtn) hintBtn.textContent = '🔇 點擊播放啟程配樂';
             }
+        }
+
+        async function startBGM() {
+            await initAudio();
+            if (!isMusicPlaying) {
+                Tone.Transport.start();
+                isMusicPlaying = true;
+                updateMusicUI();
+            }
+        }
+
+        window.toggleStartScreenBGM = async function(e) {
+            if (e) e.stopPropagation();
+            await initAudio();
+            if (isMusicPlaying) {
+                Tone.Transport.pause();
+                isMusicPlaying = false;
+            } else {
+                Tone.Transport.start();
+                isMusicPlaying = true;
+            }
+            updateMusicUI();
+        };
+
+        window.handleStartScreenTap = async function(e) {
+            if (!isMusicPlaying) {
+                await startBGM();
+            }
+        };
+
+        window.enterApp = async function(e) {
+            if (e) e.stopPropagation();
+            await startBGM();
+            const now = Tone.now();
+            safePlayNote(sfxSynth, "C5", "16n", now);
+            safePlayNote(sfxSynth, "E5", "16n", now + 0.07);
+            safePlayNote(sfxSynth, "G5", "16n", now + 0.14);
+            safePlayNote(sfxSynth, "C6", "8n", now + 0.21);
+
+            const startScreen = document.getElementById('start-screen');
+            if (startScreen) {
+                startScreen.style.opacity = '0';
+                startScreen.style.pointerEvents = 'none';
+                setTimeout(() => { startScreen.style.display = 'none'; }, 400);
+            }
+        };
+
+        document.getElementById('musicToggleBtn').addEventListener('click', async () => {
+            await window.toggleStartScreenBGM();
+        });
+
+        function playClick() {
+            if (!audioInitialized) return;
+            safePlayNote(sfxSynth, "C6", "32n");
         }
 
         function playPunch() {
-            if (audioInitialized && Tone.context.state === 'running') {
-                punchSynth.triggerAttackRelease("16n");
-            }
+            if (!audioInitialized) return;
+            safePlayNote(punchSynth, "G1", "8n");
         }
 
         function playExplosion() {
-            if (audioInitialized && Tone.context.state === 'running') {
-                explodeSynth.triggerAttackRelease("2n");
-            }
+            if (!audioInitialized) return;
+            safePlayNoise(explosionSynth, "2n");
+            safePlayNote(punchSynth, "C1", "2n");
         }
 
-        // 綁定全域點擊事件播放一般音效
-        document.addEventListener('click', async (e) => {
-            if (!audioInitialized) await initAudio();
-            
-            // 針對按鈕與折疊面板播放點擊音，但排除特定的音樂切換跟吵架+按鈕
-            const target = e.target;
-            const isButton = target.tagName === 'BUTTON' || target.closest('button') || target.tagName === 'SUMMARY';
-            const isQuarrelPlus = target.closest('.q-btn.plus');
-            const isMusicBtn = target.closest('#musicToggleBtn');
-            
-            if (isButton && !isQuarrelPlus && !isMusicBtn) {
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('button, summary, .info-action, .food-link, .shop-item-link');
+            if (btn && !btn.classList.contains('q-btn') && btn.id !== 'start-bgm-hint') {
                 playClick();
             }
-        });
-
-        // 音樂切換按鈕邏輯
-        const musicToggleBtn = document.getElementById('musicToggleBtn');
-        musicToggleBtn.addEventListener('click', async () => {
-            if (!audioInitialized) await initAudio();
-            
-            if (isMusicPlaying) {
-                Tone.Transport.stop();
-                bgmSeq.stop();
-                if (bassSeq) bassSeq.stop();
-                isMusicPlaying = false;
-                musicToggleBtn.textContent = '🔇 音樂 (關)';
-            } else {
-                Tone.Transport.start();
-                bgmSeq.start(0);
-                if (bassSeq) bassSeq.start(0);
-                isMusicPlaying = true;
-                musicToggleBtn.textContent = '🔊 音樂 (開)';
-            }
-            playClick();
         });
 
         // ==========================================
@@ -1140,74 +1752,911 @@
         updateFontState();
 
         // ==========================================
-        // 底部搖桿導航與像素轉場邏輯
+        // 分頁切換與底部 A/B/Y/X 轉場邏輯
         // ==========================================
-        window.switchCategory = function(cat) {
-            // 避免重複點擊同一個分類
-            const currentActiveBtn = document.querySelector(`.bottom-nav-btn.active`);
-            if(currentActiveBtn && currentActiveBtn.dataset.cat === cat) return;
+        let currentCat = 'A';
 
-            // 觸發像素轉場動畫
-            const trans = document.getElementById('pixel-transition');
-            trans.classList.add('animating');
-
-            // 在動畫遮住畫面的瞬間（大約 300ms），切換背後的內容
-            setTimeout(() => {
-                // 1. 更新底部按鈕的顏色狀態
-                document.querySelectorAll('.bottom-nav-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelector(`.bottom-nav-btn[data-cat="${cat}"]`).classList.add('active');
-
-                // 2. 隱藏所有的頂部子選單
-                document.querySelectorAll('.sub-nav-group').forEach(el => el.style.display = 'none');
-
-                // 3. 根據大分類顯示對應的內容與子選單
-                if (cat === 'A') {
-                    const subNav = document.getElementById('sub-nav-A');
-                    subNav.style.display = 'block';
-                    // 找出 A 分類中上一次選中的子分頁，若無則預設選中總覽
-                    const activeTab = subNav.querySelector('.tab-btn.active') || subNav.querySelector('.tab-btn');
-                    activeTab.click();
-                } 
-                else if (cat === 'B') {
-                    const subNav = document.getElementById('sub-nav-B');
-                    subNav.style.display = 'block';
-                    const activeTab = subNav.querySelector('.tab-btn.active') || subNav.querySelector('.tab-btn');
-                    activeTab.click();
-                } 
-                else if (cat === 'Y') {
-                    showDay('expenses'); // 直接顯示記帳頁面，沒有頂部子選單
-                } 
-                else if (cat === 'X') {
-                    showDay('quarrel'); // 直接顯示吵架頁面，沒有頂部子選單
-                }
-            }, 300); 
-
-            // 動畫結束後移除 class，準備下一次觸發
-            setTimeout(() => {
-                trans.classList.remove('animating');
-            }, 600);
-        }
-
-        // ==========================================
-        // 頁面顯示邏輯 (改寫以配合底部導覽)
-        // ==========================================
         window.showDay = function(id, btn) {
-            // 隱藏所有內容面板
             document.querySelectorAll('.day-panel').forEach(el => el.classList.remove('active'));
-            // 讓選中的面板顯示出來
-            document.getElementById(id).classList.add('active');
-            
-            // 如果有傳入按鈕(A, B類別的頂端分頁)，則更新按鈕狀態
-            if(btn) {
-                document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-                btn.classList.add('active');
+            const parentNav = btn.closest('.nav-tabs');
+            if (parentNav) {
+                parentNav.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             }
-            
-            window.scrollTo({top: 0, behavior: 'smooth'});
+            document.getElementById(id).classList.add('active');
+            btn.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.switchCategory = function(cat) {
+            if (cat === currentCat) return;
+            currentCat = cat;
+
+            const transitionEl = document.getElementById('pixel-transition');
+            transitionEl.classList.remove('animating');
+            void transitionEl.offsetWidth;
+            transitionEl.classList.add('animating');
+
+            document.querySelectorAll('.bottom-nav-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.cat === cat);
+            });
+
+            setTimeout(() => {
+                document.querySelectorAll('.sub-nav-group').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.day-panel').forEach(el => el.classList.remove('active'));
+
+                if (cat === 'A') {
+                    const subA = document.getElementById('sub-nav-A');
+                    subA.style.display = 'block';
+                    const activeBtn = subA.querySelector('.tab-btn.active') || subA.querySelector('.tab-btn');
+                    activeBtn.click();
+                } else if (cat === 'B') {
+                    const subB = document.getElementById('sub-nav-B');
+                    subB.style.display = 'block';
+                    const activeBtn = subB.querySelector('.tab-btn.active') || subB.querySelector('.tab-btn');
+                    activeBtn.click();
+                } else if (cat === 'Y') {
+                    document.getElementById('expenses').classList.add('active');
+                } else if (cat === 'X') {
+                    const subX = document.getElementById('sub-nav-X');
+                    subX.style.display = 'block';
+                    const activeBtn = subX.querySelector('.tab-btn.active') || subX.querySelector('.tab-btn');
+                    activeBtn.click();
+                }
+                window.scrollTo({ top: 0, behavior: 'instant' });
+            }, 280);
         };
 
         // ==========================================
-        // 記帳本 UI 渲染與操作
+        // 消氣專用「草原爆打史萊姆」小遊戲引擎
+        // ==========================================
+        const ORANGE_SLIME_SVG = `
+        <svg class="slime-sprite" viewBox="0 0 12 9" width="54" height="40" shape-rendering="crispEdges">
+            <rect x="5" y="0" width="2" height="1" fill="#c25912"/>
+            <rect x="4" y="1" width="1" height="1" fill="#c25912"/>
+            <rect x="5" y="1" width="3" height="1" fill="#f79621"/>
+            <rect x="3" y="2" width="1" height="1" fill="#c25912"/>
+            <rect x="4" y="2" width="1" height="1" fill="#f79621"/>
+            <rect x="5" y="2" width="1" height="1" fill="#fce49c"/>
+            <rect x="6" y="2" width="3" height="1" fill="#f79621"/>
+            <rect x="2" y="3" width="1" height="2" fill="#c25912"/>
+            <rect x="3" y="3" width="1" height="1" fill="#f79621"/>
+            <rect x="4" y="3" width="1" height="1" fill="#fce49c"/>
+            <rect x="5" y="3" width="4" height="1" fill="#f79621"/>
+            <rect x="9" y="3" width="1" height="2" fill="#d96b12"/>
+            <rect x="3" y="4" width="5" height="1" fill="#f79621"/>
+            <rect x="8" y="4" width="1" height="1" fill="#d96b12"/>
+            <rect x="3" y="5" width="6" height="1" fill="#d96b12"/>
+        </svg>`;
+
+        const KING_SLIME_SVG = `
+        <svg class="slime-sprite" viewBox="0 0 12 12" width="120" height="120" shape-rendering="crispEdges">
+            <rect x="5" y="0" width="1" height="4" fill="#fcd12a"/>
+            <rect x="6" y="0" width="1" height="4" fill="#d19a11"/>
+            <rect x="3" y="1" width="1" height="3" fill="#f7c825"/>
+            <rect x="4" y="2" width="1" height="2" fill="#fef08a"/>
+            <rect x="7" y="2" width="1" height="2" fill="#d19a11"/>
+            <rect x="8" y="1" width="1" height="3" fill="#b37d08"/>
+            <rect x="3" y="4" width="2" height="1" fill="#630812"/>
+            <rect x="5" y="4" width="3" height="1" fill="#c41227"/>
+            <rect x="3" y="5" width="1" height="1" fill="#c41227"/>
+            <rect x="4" y="5" width="1" height="1" fill="#e83b4e"/>
+            <rect x="5" y="5" width="4" height="1" fill="#c41227"/>
+            <rect x="1" y="6" width="1" height="2" fill="#630812"/>
+            <rect x="2" y="6" width="1" height="1" fill="#c41227"/>
+            <rect x="3" y="6" width="1" height="1" fill="#e83b4e"/>
+            <rect x="4" y="6" width="5" height="1" fill="#c41227"/>
+            <rect x="9" y="6" width="1" height="2" fill="#630812"/>
+            <rect x="2" y="7" width="6" height="1" fill="#c41227"/>
+            <rect x="8" y="7" width="1" height="1" fill="#630812"/>
+            <rect x="2" y="8" width="7" height="1" fill="#630812"/>
+        </svg>`;
+
+        // ==========================================
+        // 純 CSS 像素 (box-shadow) 角色與特效組成器
+        // ==========================================
+        function buildCssPixelShadow(grid, palette, pxSize = 4) {
+            const shadows = [];
+            for (let r = 0; r < grid.length; r++) {
+                const row = grid[r];
+                for (let c = 0; c < row.length; c++) {
+                    const ch = row[c];
+                    if (ch !== '.' && palette[ch]) {
+                        shadows.push(`${(c + 1) * pxSize}px ${(r + 1) * pxSize}px 0 ${palette[ch]}`);
+                    }
+                }
+            }
+            return shadows.join(',');
+        }
+
+        // 1. 持劍勇者 (林克風橘色中世紀劍士服：V領白內襯、斜背皮帶、金釦腰帶、短袍下擺、白長褲與中世紀皮靴)
+        const HERO_PIXEL_GRID = [
+            "...HHHHhhHHHH...",
+            "..HHHHHhhHHHHH..",
+            "..HHHHHhhHHHHH..",
+            "..HHHHHSSHHHHH..",
+            "..HHSSSSSSSSHH..",
+            "..HSSSESSSESSH..",
+            "..SSSSSSSSSSSS..",
+            "....SSSSSSSS..M.",
+            "...OOOWWWKOOOMm.",
+            "..WWOOOOOKOOMm..",
+            "..SOOOOKOOUOYm..",
+            "..SoKKKKYKKKSSYY",
+            "...oOOOOOOOOo.K.",
+            "...oOOo..oOOo...",
+            "....WW....WW....",
+            "...KKK....KKK..."
+        ];
+        // 勇者跑步幀 1 (左腳前跨、右腳後蹬、短袍飄動)
+        const HERO_RUN1_GRID = [
+            "...HHHHhhHHHH...",
+            "..HHHHHhhHHHHH..",
+            "..HHHHHhhHHHHH..",
+            "..HHHHHSSHHHHH..",
+            "..HHSSSSSSSSHH..",
+            "..HSSSESSSESSH..",
+            "..SSSSSSSSSSSS..",
+            "....SSSSSSSS...M",
+            "...OOOWWWKOOO.Mm",
+            "..SWOOOOOKOOMm..",
+            "...OOOOKOOUOYm..",
+            "..oKKKKKYKKKSSYY",
+            "..oOOOOOOOOo..K.",
+            "..oOOo...oOOo...",
+            "..WW.......WW...",
+            ".KKK........KKK."
+        ];
+        // 勇者跑步幀 2 (雙腿交錯收步衝刺、短袍擺動)
+        const HERO_RUN2_GRID = [
+            "...HHHHhhHHHH...",
+            "..HHHHHhhHHHHH..",
+            "..HHHHHhhHHHHH..",
+            "..HHHHHSSHHHHH..",
+            "..HHSSSSSSSSHH..",
+            "..HSSSESSSESSH..",
+            "..SSSSSSSSSSSS..",
+            "....SSSSSSSS.M..",
+            "...OOOWWWKOOOMm.",
+            "..WWOOOOOKOOMm..",
+            "..SOOOOKOOUOYm..",
+            "...KKKKKYKKKSSYY",
+            "...oOOOOOOOOo.K.",
+            "....oOOooOOo....",
+            ".....WW..WW.....",
+            "....KKK..KKK...."
+        ];
+        const HERO_PALETTE = {
+            H: "#261710", // 中分深色頭髮
+            h: "#140b07", // 中分髮縫深色陰影
+            S: "#ffdbb5", // 膚色
+            E: "#111111", // 眼睛
+            O: "#ff6600", // 林克風橘色中世紀短袍
+            o: "#cc4400", // 短袍深橘陰影與立體摺皺
+            U: "#e65000", // 短袍胸口層次
+            W: "#fff8e7", // 中世紀米白內襯與緊身褲
+            w: "#d9ceb8", // 內襯陰影
+            B: "#2b2b2b", // 深色鞋底
+            M: "#eef5fc", // 銀白劍身
+            m: "#94a8b8", // 劍刃陰影
+            Y: "#ffcc00", // 黃金腰帶釦與劍鍔
+            K: "#6e3811"  // 中世紀斜背皮帶、腰帶與長靴
+        };
+
+        // 勇者專屬 2px 細鏡框 (無鏡片、露出眼睛) 與加密中分瀏海細節
+        function buildHeroSubPixelOverlay() {
+            const subPixels = [];
+            const add2px = (x, y, color) => {
+                subPixels.push(`${x - 1}px ${y - 1}px 0 -1px ${color}`);
+            };
+            const frameColor = "#2b2b2b";
+            const hairColor = "#261710";
+
+            // 加密中分瀏海內側髮絲，讓中間分線更緊密自然
+            [[32, 16], [32, 18], [38, 16], [38, 18], [30, 20], [40, 20]].forEach(([x, y]) => {
+                add2px(x, y, hairColor);
+            });
+
+            // 左眼 2px 細框 (內部全透明無鏡片，清晰露出中央黑眼珠)
+            [22, 24, 26, 28].forEach(x => {
+                add2px(x, 20, frameColor); // 上框
+                add2px(x, 28, frameColor); // 下框
+            });
+            [22, 24, 26].forEach(y => {
+                add2px(20, y, frameColor); // 左外框
+                add2px(30, y, frameColor); // 左內框
+            });
+            add2px(16, 24, frameColor);    // 左鏡腳
+            add2px(18, 24, frameColor);
+
+            // 鼻樑細支架
+            [32, 34, 36, 38].forEach(x => add2px(x, 24, frameColor));
+
+            // 右眼 2px 細框 (內部全透明無鏡片，清晰露出中央黑眼珠)
+            [42, 44, 46, 48].forEach(x => {
+                add2px(x, 20, frameColor); // 上框
+                add2px(x, 28, frameColor); // 下框
+            });
+            [22, 24, 26].forEach(y => {
+                add2px(40, y, frameColor); // 右內框
+                add2px(50, y, frameColor); // 右外框
+            });
+            add2px(52, 24, frameColor);    // 右鏡腳
+            add2px(54, 24, frameColor);
+
+            return subPixels.join(',');
+        }
+
+        function buildHeroShadow(grid) {
+            return `${buildHeroSubPixelOverlay()},${buildCssPixelShadow(grid, HERO_PALETTE, 4)}`;
+        }
+
+        // 2. 烈焰法師 (紅短髮、藍色巫師袍、手持紅寶石法杖)
+        const MAGE_PIXEL_GRID = [
+            "....RRRRRRRR....",
+            "...RRRRRRRRRR...",
+            "..RRRRRRRRRRRR.F",
+            "..RRRSSRSSRRRRfF",
+            "..RRSSSSSSSSRRYY",
+            "..rRSSESSSESRr.K",
+            "...rSPSSSSPSr..K",
+            "....CCCCCCCC...K",
+            "...UUUUUUUUUU..K",
+            "..UUUUUUUUUUUSSK",
+            "..SUuYYYYYYuU..K",
+            "...UUUUuUUUUU..K",
+            "...UUUuUUUUuU..K",
+            "..UUUUuUUUUuUU.K",
+            "..YYYYYYYYYYYY.K",
+            "....uuu..uuu...."
+        ];
+        // 法師跑步幀 1 (袍擺飛揚、跨步奔跑)
+        const MAGE_RUN1_GRID = [
+            "....RRRRRRRR....",
+            "...RRRRRRRRRR...",
+            "..RRRRRRRRRRRR.F",
+            "..RRRSSRSSRRRRfF",
+            "..RRSSSSSSSSRRYY",
+            "..rRSSESSSESRr.K",
+            "...rSPSSSSPSr..K",
+            "....CCCCCCCC...K",
+            "...UUUUUUUUUU..K",
+            "..SUUUUUUUUUUSSK",
+            "...UuYYYYYYuU..K",
+            "..UUUUUuUUUUU..K",
+            "..UUUUuUUUUuU..K",
+            ".UUUUuUUUUuUU..K",
+            ".YYYYYYYYYYYY..K",
+            "..uuu......uuu.."
+        ];
+        // 法師跑步幀 2 (雙腳交錯邁步)
+        const MAGE_RUN2_GRID = [
+            "....RRRRRRRR....",
+            "...RRRRRRRRRR...",
+            "..RRRRRRRRRRRR.F",
+            "..RRRSSRSSRRRRfF",
+            "..RRSSSSSSSSRRYY",
+            "..rRSSESSSESRr.K",
+            "...rSPSSSSPSr..K",
+            "....CCCCCCCC...K",
+            "...UUUUUUUUUU..K",
+            "..UUUUUUUUUUUSSK",
+            "..SUuYYYYYYuU..K",
+            "...UUUUuUUUUU..K",
+            "...UUUuUUUUuU..K",
+            "...UUUuUUUUuU..K",
+            "...YYYYYYYYYY..K",
+            ".....uuu.uuu...."
+        ];
+        const MAGE_PALETTE = {
+            R: "#e62e2e", // 紅色短髮
+            r: "#a31919", // 紅髮陰影
+            S: "#ffe0c2", // 膚色
+            E: "#111111", // 眼睛
+            P: "#ff94a2", // 臉頰紅暈
+            C: "#66b2ff", // 巫師袍領口
+            U: "#1e57c8", // 藍色巫師袍
+            u: "#113278", // 巫師袍深藍摺皺
+            Y: "#ffd700", // 巫師袍金邊與法杖金飾
+            K: "#8b4513", // 木質法杖
+            F: "#ff2a00", // 法杖紅寶石
+            f: "#ffff77"  // 寶石高光
+        };
+
+        // 3. 近戰揮砍劍氣 12x12 CSS Pixels
+        const SLASH_PIXEL_GRID = [
+            "....WWWW....",
+            "..WWCCCCWW..",
+            ".WCC....CCW.",
+            ".WC......CW.",
+            "........CCW.",
+            "........CCW.",
+            "........CCW.",
+            ".WC......CW.",
+            ".WCC....CCW.",
+            "..WWCCCCWW..",
+            "....WWWW....",
+            "............"
+        ];
+        const SLASH_PALETTE = {
+            W: "#ffffff",
+            C: "#77eeff"
+        };
+
+        // 4. 法師火球 8x8 CSS Pixels
+        const FIREBALL_PIXEL_GRID = [
+            "..RRRR..",
+            ".ROOOOR.",
+            "ROOYYOOR",
+            "ROYYYYOR",
+            "ROYYYYOR",
+            "ROOYYOOR",
+            ".ROOOOR.",
+            "..RRRR.."
+        ];
+        const FIREBALL_PALETTE = {
+            R: "#ff2200",
+            O: "#ff8800",
+            Y: "#ffff44"
+        };
+
+        const HERO_BOX_SHADOW = buildHeroShadow(HERO_PIXEL_GRID);
+        const HERO_RUN1_SHADOW = buildHeroShadow(HERO_RUN1_GRID);
+        const HERO_RUN2_SHADOW = buildHeroShadow(HERO_RUN2_GRID);
+
+        const MAGE_BOX_SHADOW = buildCssPixelShadow(MAGE_PIXEL_GRID, MAGE_PALETTE, 4);
+        const MAGE_RUN1_SHADOW = buildCssPixelShadow(MAGE_RUN1_GRID, MAGE_PALETTE, 4);
+        const MAGE_RUN2_SHADOW = buildCssPixelShadow(MAGE_RUN2_GRID, MAGE_PALETTE, 4);
+
+        const SLASH_BOX_SHADOW = buildCssPixelShadow(SLASH_PIXEL_GRID, SLASH_PALETTE, 4);
+        const FIREBALL_BOX_SHADOW = buildCssPixelShadow(FIREBALL_PIXEL_GRID, FIREBALL_PALETTE, 4);
+
+        // 渲染選擇畫面的 CSS 像素角色預覽
+        const previewHeroEl = document.getElementById('preview-hero-dots');
+        const previewMageEl = document.getElementById('preview-mage-dots');
+        if (previewHeroEl) previewHeroEl.style.boxShadow = HERO_BOX_SHADOW;
+        if (previewMageEl) previewMageEl.style.boxShadow = MAGE_BOX_SHADOW;
+
+        let selectedChar = 'hero'; // 'hero' 或 'mage'
+        let playerState = null;
+        let activeFireballs = [];
+        let slimeScore = 0;
+        let bossHP = 20;
+        let bossSpawned = false;
+        let gameActive = false;
+        let activeSlimes = [];
+        let bossState = null;
+        let animFrameId = null;
+
+        window.selectCharacter = function(type, e) {
+            if (e) e.stopPropagation();
+            selectedChar = type;
+            playClick();
+            document.getElementById('char-card-hero').classList.toggle('selected', type === 'hero');
+            document.getElementById('char-card-mage').classList.toggle('selected', type === 'mage');
+        };
+
+        window.openCharSelect = function() {
+            gameActive = false;
+            if (animFrameId) cancelAnimationFrame(animFrameId);
+            const overlay = document.getElementById('slime-overlay');
+            const msg = document.getElementById('slime-overlay-msg');
+            msg.innerHTML = `請選擇出戰角色！<br><span style="font-size:12px; color:#ffdd99;">拖曳畫面移動，點擊發動攻擊（滿 30 分召喚史萊姆王）</span>`;
+            overlay.style.display = 'flex';
+        };
+
+        function spawnFloatingText(x, y, text, bgColor = '#ff3300') {
+            const arena = document.getElementById('slime-arena');
+            const dmg = document.createElement('div');
+            dmg.className = 'hit-dmg-text';
+            dmg.style.left = `${x}px`;
+            dmg.style.top = `${y}px`;
+            dmg.style.background = bgColor;
+            dmg.textContent = text;
+            arena.appendChild(dmg);
+            setTimeout(() => dmg.remove(), 500);
+        }
+
+        function createPlayerEntity() {
+            const arena = document.getElementById('slime-arena');
+            if (playerState && playerState.el) playerState.el.remove();
+
+            const rect = arena.getBoundingClientRect();
+            const startX = Math.max(30, (rect.width - 64) / 2);
+            const startY = Math.max(60, (rect.height - 70) / 2);
+
+            const el = document.createElement('div');
+            el.className = 'player-entity';
+            el.innerHTML = `
+                <div class="player-sprite-wrap">
+                    <div class="css-pixel-box"><div class="css-pixel-dots"></div></div>
+                </div>
+                <div class="player-shadow"></div>
+            `;
+            const dotsEl = el.querySelector('.css-pixel-dots');
+            dotsEl.style.boxShadow = selectedChar === 'hero' ? HERO_BOX_SHADOW : MAGE_BOX_SHADOW;
+
+            arena.appendChild(el);
+
+            playerState = {
+                el,
+                spriteWrap: el.querySelector('.player-sprite-wrap'),
+                dotsEl,
+                x: startX,
+                y: startY,
+                facing: 1,
+                walkPhase: 0,
+                lastMoveTime: 0,
+                lastDustTime: 0,
+                currentFrame: -1,
+                isMoving: false
+            };
+
+            const roleLabel = document.getElementById('slime-hud-role');
+            if (roleLabel) {
+                roleLabel.textContent = selectedChar === 'hero' ? '⚔️ 勇者：揮砍模式' : '🪄 法師：火球模式';
+            }
+        }
+
+        function spawnRunDust(x, y) {
+            const arena = document.getElementById('slime-arena');
+            if (!arena) return;
+            const dust = document.createElement('div');
+            dust.className = 'run-dust';
+            dust.style.left = `${x}px`;
+            dust.style.top = `${y}px`;
+            arena.appendChild(dust);
+            setTimeout(() => dust.remove(), 350);
+        }
+
+        function hitSlime(slimeObj) {
+            if (!gameActive || bossSpawned) return;
+            playPunch();
+
+            slimeScore++;
+            document.getElementById('slime-score-display').textContent = `SCORE: ${slimeScore} / 30`;
+            spawnFloatingText(slimeObj.x + 10, slimeObj.y, '+1');
+
+            slimeObj.el.remove();
+            activeSlimes = activeSlimes.filter(s => s !== slimeObj);
+
+            if (slimeScore >= 30) {
+                spawnKingSlime();
+            } else {
+                setTimeout(createMovingSlime, 220);
+            }
+        }
+
+        function hitBoss() {
+            if (!gameActive || !bossState || bossHP <= 0) return;
+            bossHP--;
+            document.getElementById('boss-hp-text').textContent = bossHP;
+            document.getElementById('boss-hp-bar-fill').style.width = `${(bossHP / 20) * 100}%`;
+
+            bossState.sprite.classList.add('boss-hit-flash');
+            setTimeout(() => bossState && bossState.sprite.classList.remove('boss-hit-flash'), 80);
+
+            spawnFloatingText(bossState.x + 40 + (Math.random() * 30 - 15), bossState.y + 20, 'HIT!');
+
+            if (bossHP > 0) {
+                playPunch();
+                bossState.vx = (Math.random() < 0.5 ? -1 : 1) * (2.5 + Math.random() * 1.8);
+                bossState.vy = (Math.random() < 0.5 ? -1 : 1) * (2.0 + Math.random() * 1.5);
+            } else {
+                playExplosion();
+                bossState.el.remove();
+                bossState = null;
+                completeSlimeGame();
+            }
+        }
+
+        // 玩家發動攻擊（勇者：近距離揮砍 / 法師：發射像素火球）
+        async function triggerPlayerAttack(tapX, tapY) {
+            if (!gameActive || !playerState) return;
+            if (!audioInitialized) await initAudio();
+
+            const arena = document.getElementById('slime-arena');
+            const rect = arena.getBoundingClientRect();
+            const pCenterX = playerState.x + 32;
+            const pCenterY = playerState.y + 35;
+
+            // 若點擊位置距離角色超過 12px，轉向點擊方向
+            if (Math.abs(tapX - pCenterX) > 12) {
+                playerState.facing = tapX >= pCenterX ? 1 : -1;
+            }
+
+            if (selectedChar === 'hero') {
+                // 劍士揮砍音效 (使用獨立的特效合成器，不與背景音樂鼓聲衝突)
+                safePlayNote(sfxSynth, "G5", "32n");
+                safePlayNoise(explosionSynth, "32n");
+
+                // 向前微幅踏步斬擊
+                const stepDirX = tapX - pCenterX;
+                const stepDirY = tapY - pCenterY;
+                const stepLen = Math.hypot(stepDirX, stepDirY) || 1;
+                playerState.x = Math.max(5, Math.min(rect.width - 68, playerState.x + (stepDirX / stepLen) * 16));
+                playerState.y = Math.max(30, Math.min(rect.height - 74, playerState.y + (stepDirY / stepLen) * 16));
+
+                // 產生 CSS 像素劍氣特效
+                const slashEl = document.createElement('div');
+                slashEl.className = 'sword-slash-fx';
+                slashEl.innerHTML = `<div class="sword-slash-dots"></div>`;
+                slashEl.querySelector('.sword-slash-dots').style.boxShadow = SLASH_BOX_SHADOW;
+                playerState.spriteWrap.appendChild(slashEl);
+                setTimeout(() => slashEl.remove(), 220);
+
+                // 判定近距離揮砍範圍內的所有史萊姆與史萊姆王
+                const slashCenterX = playerState.x + 32 + (playerState.facing * 32);
+                const slashCenterY = playerState.y + 35;
+                let hitCount = 0;
+
+                const slimesSnapshot = [...activeSlimes];
+                slimesSnapshot.forEach(s => {
+                    const sCenterX = s.x + 30;
+                    const sCenterY = s.y + 26;
+                    const distToSlash = Math.hypot(sCenterX - slashCenterX, sCenterY - slashCenterY);
+                    const distToHero = Math.hypot(sCenterX - (playerState.x + 32), sCenterY - (playerState.y + 35));
+                    if (distToSlash <= 78 || distToHero <= 68) {
+                        hitSlime(s);
+                        hitCount++;
+                    }
+                });
+
+                if (bossState) {
+                    const bCenterX = bossState.x + 65;
+                    const bCenterY = bossState.y + 75;
+                    const distToBoss = Math.hypot(bCenterX - slashCenterX, bCenterY - slashCenterY);
+                    const distHeroBoss = Math.hypot(bCenterX - (playerState.x + 32), bCenterY - (playerState.y + 35));
+                    if (distToBoss <= 105 || distHeroBoss <= 95) {
+                        hitBoss();
+                        hitCount++;
+                    }
+                }
+
+                if (hitCount === 0) {
+                    spawnFloatingText(slashCenterX - 15, slashCenterY - 20, 'SLASH!', '#183c92');
+                }
+            } else {
+                // 法師發射像素火球音效
+                safePlayNote(sfxSynth, "E6", "16n");
+
+                // 決定火球飛行目標：優先鎖定點擊處附近的敵人，否則鎖定最近敵人或點擊方向
+                let targetX = tapX;
+                let targetY = tapY;
+
+                if (bossState) {
+                    targetX = bossState.x + 65;
+                    targetY = bossState.y + 75;
+                } else if (activeSlimes.length > 0) {
+                    // 尋找離點擊位置或法師最近的史萊姆
+                    let bestSlime = null;
+                    let bestDist = Infinity;
+                    activeSlimes.forEach(s => {
+                        const sx = s.x + 30;
+                        const sy = s.y + 26;
+                        const d = Math.hypot(sx - tapX, sy - tapY);
+                        if (d < bestDist) {
+                            bestDist = d;
+                            bestSlime = s;
+                        }
+                    });
+                    if (bestSlime) {
+                        targetX = bestSlime.x + 30;
+                        targetY = bestSlime.y + 26;
+                    }
+                }
+
+                playerState.facing = targetX >= pCenterX ? 1 : -1;
+
+                const dx = targetX - pCenterX;
+                const dy = targetY - pCenterY;
+                const dist = Math.hypot(dx, dy) || 1;
+                const speed = 8.5;
+
+                const fbEl = document.createElement('div');
+                fbEl.className = 'fireball-entity';
+                fbEl.innerHTML = `<div class="fireball-dots"></div>`;
+                fbEl.querySelector('.fireball-dots').style.boxShadow = FIREBALL_BOX_SHADOW;
+                arena.appendChild(fbEl);
+
+                activeFireballs.push({
+                    el: fbEl,
+                    x: pCenterX - 16,
+                    y: pCenterY - 16,
+                    vx: (dx / dist) * speed,
+                    vy: (dy / dist) * speed
+                });
+            }
+        }
+
+        // 綁定草地競技場「拖曳移動、點擊攻擊」事件
+        (function setupArenaControls() {
+            const arena = document.getElementById('slime-arena');
+            if (!arena) return;
+
+            let dragInfo = {
+                active: false,
+                pointerId: null,
+                lastX: 0,
+                lastY: 0,
+                totalMoved: 0
+            };
+
+            arena.addEventListener('pointerdown', (e) => {
+                if (!gameActive || e.target.closest('#slime-overlay')) return;
+                e.preventDefault();
+                arena.setPointerCapture(e.pointerId);
+                dragInfo.active = true;
+                dragInfo.pointerId = e.pointerId;
+                dragInfo.lastX = e.clientX;
+                dragInfo.lastY = e.clientY;
+                dragInfo.totalMoved = 0;
+            });
+
+            arena.addEventListener('pointermove', (e) => {
+                if (!dragInfo.active || e.pointerId !== dragInfo.pointerId || !gameActive || !playerState) return;
+                const dx = e.clientX - dragInfo.lastX;
+                const dy = e.clientY - dragInfo.lastY;
+                dragInfo.lastX = e.clientX;
+                dragInfo.lastY = e.clientY;
+                const stepDist = Math.hypot(dx, dy);
+                dragInfo.totalMoved += stepDist;
+
+                if (stepDist > 0.3) {
+                    const rect = arena.getBoundingClientRect();
+                    playerState.x = Math.max(4, Math.min(rect.width - 68, playerState.x + dx));
+                    playerState.y = Math.max(30, Math.min(rect.height - 74, playerState.y + dy));
+                    if (Math.abs(dx) > 0.6) {
+                        playerState.facing = dx > 0 ? 1 : -1;
+                    }
+                    playerState.isMoving = true;
+                    playerState.lastMoveTime = performance.now();
+                }
+            });
+
+            function endPointer(e) {
+                if (!dragInfo.active || e.pointerId !== dragInfo.pointerId) return;
+                dragInfo.active = false;
+                if (playerState) playerState.isMoving = false;
+
+                // 若手指/滑鼠移動距離小於 12px，視為「點擊攻擊」
+                if (dragInfo.totalMoved < 12 && gameActive) {
+                    const rect = arena.getBoundingClientRect();
+                    const tapX = e.clientX - rect.left;
+                    const tapY = e.clientY - rect.top;
+                    triggerPlayerAttack(tapX, tapY);
+                }
+            }
+
+            arena.addEventListener('pointerup', endPointer);
+            arena.addEventListener('pointercancel', endPointer);
+        })();
+
+        function createMovingSlime() {
+            if (!gameActive || bossSpawned) return;
+            const arena = document.getElementById('slime-arena');
+            const rect = arena.getBoundingClientRect();
+            const maxW = Math.max(200, rect.width - 70);
+            const maxH = Math.max(200, rect.height - 70);
+
+            const el = document.createElement('div');
+            el.className = 'slime-entity';
+            el.style.pointerEvents = 'none';
+            el.innerHTML = `${ORANGE_SLIME_SVG}<div class="slime-shadow"></div>`;
+
+            const slimeObj = {
+                el,
+                sprite: el.querySelector('.slime-sprite'),
+                shadow: el.querySelector('.slime-shadow'),
+                x: 15 + Math.random() * (maxW - 15),
+                y: 40 + Math.random() * (maxH - 40),
+                vx: (Math.random() < 0.5 ? -1 : 1) * (1.1 + Math.random() * 1.4),
+                vy: (Math.random() < 0.5 ? -1 : 1) * (0.9 + Math.random() * 1.2),
+                jumpPhase: Math.random() * Math.PI * 2,
+                jumpSpeed: 0.14 + Math.random() * 0.06
+            };
+
+            arena.appendChild(el);
+            activeSlimes.push(slimeObj);
+        }
+
+        function spawnKingSlime() {
+            bossSpawned = true;
+            activeSlimes.forEach(s => s.el.remove());
+            activeSlimes = [];
+
+            const arena = document.getElementById('slime-arena');
+            const rect = arena.getBoundingClientRect();
+            document.getElementById('boss-hp-wrapper').style.display = 'block';
+            document.getElementById('boss-hp-text').textContent = bossHP;
+            document.getElementById('boss-hp-bar-fill').style.width = '100%';
+
+            if (audioInitialized) {
+                const now = Tone.now();
+                safePlayNote(punchSynth, "C2", "8n", now);
+                safePlayNote(punchSynth, "F#2", "8n", now + 0.15);
+                safePlayNote(punchSynth, "C2", "4n", now + 0.3);
+            }
+
+            const el = document.createElement('div');
+            el.className = 'boss-entity';
+            el.style.pointerEvents = 'none';
+            el.innerHTML = `${KING_SLIME_SVG}<div class="boss-shadow"></div>`;
+
+            bossState = {
+                el,
+                sprite: el.querySelector('.slime-sprite'),
+                shadow: el.querySelector('.boss-shadow'),
+                x: Math.max(30, (rect.width - 130) / 2),
+                y: Math.max(70, (rect.height - 150) / 2),
+                vx: 2.2,
+                vy: 1.6,
+                jumpPhase: 0,
+                jumpSpeed: 0.16
+            };
+
+            arena.appendChild(el);
+        }
+
+        function updateSlimeLoop() {
+            if (!gameActive) return;
+            const arena = document.getElementById('slime-arena');
+            const rect = arena.getBoundingClientRect();
+            const now = performance.now();
+
+            // 更新玩家角色位置與跑步擺腿、前傾衝刺與腳底揚塵動畫
+            if (playerState) {
+                const activelyRunning = playerState.isMoving && (now - playerState.lastMoveTime < 140);
+                if (activelyRunning) {
+                    playerState.walkPhase += 0.42;
+                    const runFrame = Math.floor(playerState.walkPhase / 1.5) % 2 === 0 ? 1 : 2;
+                    if (playerState.currentFrame !== runFrame) {
+                        playerState.currentFrame = runFrame;
+                        if (selectedChar === 'hero') {
+                            playerState.dotsEl.style.boxShadow = runFrame === 1 ? HERO_RUN1_SHADOW : HERO_RUN2_SHADOW;
+                        } else {
+                            playerState.dotsEl.style.boxShadow = runFrame === 1 ? MAGE_RUN1_SHADOW : MAGE_RUN2_SHADOW;
+                        }
+                    }
+                    // 跑步時定期在腳跟產生像素草地揚塵
+                    if (now - playerState.lastDustTime > 130) {
+                        playerState.lastDustTime = now;
+                        const dustX = playerState.x + (playerState.facing === 1 ? 12 : 44);
+                        const dustY = playerState.y + 56;
+                        spawnRunDust(dustX, dustY);
+                    }
+                } else {
+                    playerState.walkPhase = 0;
+                    if (playerState.currentFrame !== 0) {
+                        playerState.currentFrame = 0;
+                        playerState.dotsEl.style.boxShadow = selectedChar === 'hero' ? HERO_BOX_SHADOW : MAGE_BOX_SHADOW;
+                    }
+                }
+                const runBounce = activelyRunning ? -Math.abs(Math.sin(playerState.walkPhase)) * 7 : 0;
+                const runLean = activelyRunning ? 8 : 0;
+                playerState.el.style.transform = `translate3d(${playerState.x}px, ${playerState.y}px, 0)`;
+                playerState.spriteWrap.style.transform = `translateY(${runBounce}px) scaleX(${playerState.facing}) rotate(${runLean}deg)`;
+            }
+
+            // 更新法師火球飛行與碰撞判定
+            for (let i = activeFireballs.length - 1; i >= 0; i--) {
+                const fb = activeFireballs[i];
+                fb.x += fb.vx;
+                fb.y += fb.vy;
+                fb.el.style.transform = `translate3d(${fb.x}px, ${fb.y}px, 0)`;
+
+                let hit = false;
+                const fbCenterX = fb.x + 16;
+                const fbCenterY = fb.y + 16;
+
+                if (bossState) {
+                    const bCenterX = bossState.x + 65;
+                    const bCenterY = bossState.y + 75;
+                    if (Math.hypot(fbCenterX - bCenterX, fbCenterY - bCenterY) < 62) {
+                        hitBoss();
+                        hit = true;
+                    }
+                } else {
+                    for (let j = 0; j < activeSlimes.length; j++) {
+                        const s = activeSlimes[j];
+                        const sCenterX = s.x + 30;
+                        const sCenterY = s.y + 26;
+                        if (Math.hypot(fbCenterX - sCenterX, fbCenterY - sCenterY) < 38) {
+                            hitSlime(s);
+                            hit = true;
+                            break;
+                        }
+                    }
+                }
+
+                // 超出邊界或命中目標則移除火球
+                if (hit || fb.x < -40 || fb.x > rect.width + 40 || fb.y < -40 || fb.y > rect.height + 40) {
+                    fb.el.remove();
+                    activeFireballs.splice(i, 1);
+                }
+            }
+
+            activeSlimes.forEach(s => {
+                s.x += s.vx;
+                s.y += s.vy;
+                if (s.x <= 8 || s.x >= rect.width - 68) s.vx *= -1;
+                if (s.y <= 35 || s.y >= rect.height - 60) s.vy *= -1;
+
+                s.jumpPhase += s.jumpSpeed;
+                const jumpY = -Math.abs(Math.sin(s.jumpPhase)) * 18;
+                const scaleX = s.vx < 0 ? -1 : 1;
+                const shadowScale = 1 - Math.abs(Math.sin(s.jumpPhase)) * 0.35;
+
+                s.el.style.transform = `translate3d(${s.x}px, ${s.y}px, 0)`;
+                s.sprite.style.transform = `translateY(${jumpY}px) scaleX(${scaleX})`;
+                s.shadow.style.transform = `scale(${shadowScale})`;
+            });
+
+            if (bossState) {
+                bossState.x += bossState.vx;
+                bossState.y += bossState.vy;
+                if (bossState.x <= 10 || bossState.x >= rect.width - 140) bossState.vx *= -1;
+                if (bossState.y <= 55 || bossState.y >= rect.height - 155) bossState.vy *= -1;
+
+                bossState.jumpPhase += bossState.jumpSpeed;
+                const jumpY = -Math.abs(Math.sin(bossState.jumpPhase)) * 26;
+                const scaleX = bossState.vx < 0 ? -1 : 1;
+
+                bossState.el.style.transform = `translate3d(${bossState.x}px, ${bossState.y}px, 0)`;
+                bossState.sprite.style.transform = `translateY(${jumpY}px) scaleX(${scaleX})`;
+            }
+
+            animFrameId = requestAnimationFrame(updateSlimeLoop);
+        }
+
+        function completeSlimeGame() {
+            gameActive = false;
+            if (animFrameId) cancelAnimationFrame(animFrameId);
+            document.getElementById('boss-hp-wrapper').style.display = 'none';
+
+            activeFireballs.forEach(fb => fb.el.remove());
+            activeFireballs = [];
+
+            const overlay = document.getElementById('slime-overlay');
+            const msg = document.getElementById('slime-overlay-msg');
+            msg.innerHTML = `🎉 恭喜擊敗紅色史萊姆王！<br><span style="color:#ffdd00; font-size:18px;">怒氣值已 100% 清空歸零！</span><br><span style="font-size:12px;">可重新選擇角色再戰一場 ♥</span>`;
+            overlay.style.display = 'flex';
+        }
+
+        window.startSlimeGame = async function(e) {
+            if (e) e.stopPropagation();
+            if (!audioInitialized) await initAudio();
+            playClick();
+
+            slimeScore = 0;
+            bossHP = 20;
+            bossSpawned = false;
+            gameActive = true;
+
+            activeSlimes.forEach(s => s.el.remove());
+            activeSlimes = [];
+            activeFireballs.forEach(fb => fb.el.remove());
+            activeFireballs = [];
+            if (bossState) {
+                bossState.el.remove();
+                bossState = null;
+            }
+
+            createPlayerEntity();
+
+            document.getElementById('slime-score-display').textContent = `SCORE: 0 / 30`;
+            document.getElementById('boss-hp-wrapper').style.display = 'none';
+            document.getElementById('slime-overlay').style.display = 'none';
+
+            for (let i = 0; i < 6; i++) {
+                createMovingSlime();
+            }
+
+            if (animFrameId) cancelAnimationFrame(animFrameId);
+            animFrameId = requestAnimationFrame(updateSlimeLoop);
+        };
+
+        // ==========================================
+        // 記帳本 UI 渲染與操作 (支援日幣 JPY 與台幣 TWD 雙幣別)
         // ==========================================
         function updateExpenseUI() {
             const list = document.getElementById('expense-list');
@@ -1216,8 +2665,11 @@
             
             list.innerHTML = '';
             let totalJpy = 0;
+            let totalTwd = 0;
             let meJpy = 0;
+            let meTwd = 0;
             let gfJpy = 0;
+            let gfTwd = 0;
 
             const payerMap = {
                 'me': '1P 羊隻',
@@ -1230,21 +2682,52 @@
             }
 
             expenses.forEach((exp) => {
-                totalJpy += exp.amount;
-                if (exp.payer === 'me') meJpy += exp.amount;
-                if (exp.payer === 'gf') gfJpy += exp.amount;
+                const currency = exp.currency || 'JPY';
+                let jpyVal = 0;
+                let twdVal = 0;
 
-                const twdAmount = Math.round(exp.amount * rate);
+                if (currency === 'TWD') {
+                    twdVal = exp.amount;
+                    jpyVal = Math.round(exp.amount / rate);
+                } else {
+                    jpyVal = exp.amount;
+                    twdVal = Math.round(exp.amount * rate);
+                }
+
+                totalJpy += jpyVal;
+                totalTwd += twdVal;
+
+                if (exp.payer === 'me') {
+                    meJpy += jpyVal;
+                    meTwd += twdVal;
+                }
+                if (exp.payer === 'gf') {
+                    gfJpy += jpyVal;
+                    gfTwd += twdVal;
+                }
+
+                const currencyBadge = currency === 'TWD' 
+                    ? '<span style="background:#183c92; color:#fff; padding:2px 6px; font-size:11px; margin-left:6px; border:1px solid #111;">TWD</span>'
+                    : '<span style="background:#ff6600; color:#fff; padding:2px 6px; font-size:11px; margin-left:6px; border:1px solid #111;">JPY</span>';
+
+                const primaryPriceText = currency === 'TWD'
+                    ? `NT$${exp.amount.toLocaleString()}`
+                    : `¥${exp.amount.toLocaleString()}`;
+                
+                const subPriceText = currency === 'TWD'
+                    ? `約 ¥${jpyVal.toLocaleString()}`
+                    : `約 NT$${twdVal.toLocaleString()}`;
+
                 const item = document.createElement('div');
                 item.className = 'expense-item';
                 item.innerHTML = `
                     <div class="expense-info">
                         <div class="expense-name">${exp.name}</div>
-                        <div class="expense-payer">${payerMap[exp.payer]}</div>
+                        <div class="expense-payer">${payerMap[exp.payer]}</div>${currencyBadge}
                     </div>
                     <div class="expense-price">
-                        <div class="expense-jpy">¥${exp.amount.toLocaleString()}</div>
-                        <div class="expense-twd">NT$${twdAmount.toLocaleString()}</div>
+                        <div class="expense-jpy">${primaryPriceText}</div>
+                        <div class="expense-twd">${subPriceText}</div>
                     </div>
                     <button class="delete-btn" onclick="deleteExpense('${exp.id}')" title="刪除此筆紀錄">X</button>
                 `;
@@ -1252,23 +2735,27 @@
             });
 
             document.getElementById('total-jpy').innerText = `¥${totalJpy.toLocaleString()}`;
-            document.getElementById('total-twd').innerText = `NT$${Math.round(totalJpy * rate).toLocaleString()}`;
+            document.getElementById('total-twd').innerText = `NT$${totalTwd.toLocaleString()}`;
             document.getElementById('me-jpy').innerText = `¥${meJpy.toLocaleString()}`;
+            document.getElementById('me-twd').innerText = `(約 NT$${meTwd.toLocaleString()})`;
             document.getElementById('gf-jpy').innerText = `¥${gfJpy.toLocaleString()}`;
+            document.getElementById('gf-twd').innerText = `(約 NT$${gfTwd.toLocaleString()})`;
         }
 
         window.addExpense = async function() {
             const nameInput = document.getElementById('exp-name');
             const amountInput = document.getElementById('exp-amount');
+            const currencyInput = document.getElementById('exp-currency');
             const payerInput = document.getElementById('exp-payer');
 
             const name = nameInput.value.trim();
             const amount = parseInt(amountInput.value);
+            const currency = currencyInput ? currencyInput.value : 'JPY';
             const payer = payerInput.value;
 
             if (!name || isNaN(amount) || amount <= 0) return;
 
-            const newExp = { name, amount, payer, timestamp: Date.now() };
+            const newExp = { name, amount, currency, payer, timestamp: Date.now() };
 
             if (db && currentUser) {
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'expenses'), newExp);
@@ -1340,10 +2827,10 @@
             let newCount = quarrels.count + change;
             if (newCount < 0) newCount = 0;
             
-            // 處理吵架專屬的揍拳與爆炸音效
+            // 處理吵架專屬的揍拳與爆炸音效（第 21 次起才會觸發爆炸音）
             if (change > 0) {
                 if (!audioInitialized) await initAudio();
-                if (newCount >= 20) {
+                if (newCount >= 21) {
                     playExplosion();
                 } else {
                     playPunch();
